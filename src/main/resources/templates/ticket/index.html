@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+Copyright 2016 Alexander Kosarev akosarev@acruxsource.org
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Bootdesk :: Tickets</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4" th:include="ticket/create :: #_ticket_form"></div>
+                <div class="col-lg-8">
+                    <h1>Tickets list
+                        <small>
+                            <a th:if="!${all}" th:href="@{/ticket(all=true)}">All</a>
+                            <a th:if="${all}" th:href="@{/ticket}">Not resolved</a>
+                        </small>
+                    </h1>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <th>
+                                    Issue
+                                </th>
+                                <th>
+                                    Opened
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="ticket : ${tickets}">
+                                <td th:text="${ticket.id}">ID</td>
+                                <td>
+                                    <a th:style="${ticket.resolveDate != null}?'text-decoration:line-through;':''" th:href="@{/ticket/{id}/view(id=${ticket.id})}" th:text="${ticket.issue}"></a>
+                                </td>
+                                <td th:text="${ticket.createDate}">Opened</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

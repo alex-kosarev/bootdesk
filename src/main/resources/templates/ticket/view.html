@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--
+Copyright 2016 Alexander Kosarev akosarev@acruxsource.org
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Bootdesk :: Open Tickets</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4" th:include="ticket/create :: #_ticket_form"></div>
+                <div class="col-lg-8">
+                    <a th:href="@{/ticket}">&larr; All tickets</a>
+                    <h1 th:style="${ticket.resolveDate != null}?'text-decoration:line-through;':''">Ticket #<span th:text="${ticket.id}"></span>: <span th:text="${ticket.issue}"></span></h1>
+                    <div>Created: <span th:text="${ticket.createDate}"></span></div>
+                    <p th:text="${ticket.description}"></p>
+                    <br/>
+                    <div>
+                        <a th:if="${ticket.resolveDate == null}" th:href="@{/ticket/{ticketId}/resolve(ticketId=${ticket.id})}">Resolve</a>
+                        <a th:if="${ticket.resolveDate != null}" th:href="@{/ticket/{ticketId}/reopen(ticketId=${ticket.id})}">Re-open</a>
+                    </div>
+                    <hr/>
+                    <h3>Discussion</h3>
+                    <div th:each="ticketComment : ${ticketComments}" class="well well-sm">
+                        <strong th:text="${ticketComment.createDate}"></strong>
+                        <p th:text="${ticketComment.comment}"></p>
+                    </div>
+                    <form th:action="@{/ticket/{ticketId}/ticketComment(ticketId=${ticket.id})}" method="post">
+                        <div class="form-group">
+                            <label>Your comment:</label>
+                            <textarea name="comment" placeholder="Input your comment here..." class="form-control"></textarea>
+                        </div>
+                        <button class="btn btn-primary pull-right"><i class="glyphicon glyphicon-comment"></i> Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
